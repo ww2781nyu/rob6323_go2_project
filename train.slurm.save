@@ -1,5 +1,4 @@
 #!/bin/bash
-
 #SBATCH --requeue
 #SBATCH --nodes=1
 #SBATCH --ntasks-per-node=1
@@ -10,8 +9,14 @@
 #SBATCH --mail-type=END
 #SBATCH --account=rob_gy6323-2025fa
 #SBATCH --partition=c12m85-a100-1
-#SBATCH --output=../slurm_%j.out
-#SBATCH --error=../slurm_%j.err
+#SBATCH --output=/home/%u/rob6323_go2_project/logs/slurm_%j.out
+#SBATCH --error=/home/%u/rob6323_go2_project/logs/slurm_%j.err
+set -euxo pipefail
+
+echo "HOST=$(hostname) PWD=$(pwd) DATE=$(date)"
+
+
+
 
 set -euo pipefail
 

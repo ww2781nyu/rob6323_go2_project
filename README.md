@@ -165,3 +165,29 @@ The suggested way to inspect these logs is via the Open OnDemand web interface:
 
 ---
 Students should only edit README.md below this line.
+1. We followed the Project Tutorial and completed the modifications for parts 1-6.
+2. We have modified the parameters; the modified parameters are as follows: 
+raibert_heuristic_reward_scale: -1.0 Reducing this weight is to prevent the gait guidance reward from being overly powerful and to avoid the robot sacrificing the tracking of movement speed instructions in pursuit of precise landing points.
+
+feet_clearance_reward_scale: Significantly reduce the penalty for the height of leg lifting to prevent robots from performing extremely conservative and strenuous "high leg lifting" actions to avoid punishment, thereby saving energy.
+
+tracking_contacts_shaped_force_reward_scale: 0.4 Reduce the sensitivity of the ground contact reward so that it can guide the foot tip to provide a stable support without interfering with the smoothness of gait switching.
+
+orient_reward_scale: -0.5 Reduce the intensity of posture punishment to allow the robot to have a reasonable body tilt when turning at high speed, avoiding a stiff gait due to overly tight constraints.
+
+lin_vel_z_reward_scale: -0.002 Reduce the vertical jitter penalty to match the physical numerical magnitude of the smaller vertical speed, ensuring that this item only serves as an auxiliary smoothing function rather than hindering the movement.
+
+dof_vel_reward_scale: -1.0e-05 Given the relatively large value of the joint speed, subtle regularization is achieved through extremely small weights, which not only inhibits the excessive wear of the motor but also does not limit the flexibility of the leg swing.
+
+ang_vel_xy_reward_scale: -0.0001 Moderately relax the restrictions on body rolling and pitch speed to enable the robot to maintain dynamic balance through natural body fine-tuning in complex dynamic conditions.
+
+lin_vel_reward_scale: 2.1 Significantly increase the weight of linear speed rewards, aiming to establish it as the primary goal and force the robot to pursue and maintain the target traveling speed more actively.
+
+yaw_rate_reward_scale: 0.6 Slightly increase the steering reward to enhance the robot's response sensitivity to Angle change instructions and shorten the steering delay.
+
+action_rate_reward_scale: -0.01 The sense of constraint that reduces the smoothness of actions allows the strategy to generate a fast enough action response to achieve high-performance walking, while still filtering out harmful high-frequency jitter.
+3. We did not modify any parameters other than those mentioned above.
+4. To reproduce the results, simply run the code.
+5. To reproduce the results for bonus 1, remove "_bonus1" from the end of the filename of the file located at `source/rob6323_go2/rob6323_go2/tasks/direct/rob6323_go2/rob6323_go2_env_bonus1.py`.
+6. To reproduce the results of bonus2, simply remove "_bonus2" from the end of the filename of `source/rob6323_go2/rob6323_go2/tasks/direct/rob6323_go2/rob6323_go2_env_bonus2.py` and `source/rob6323_go2/rob6323_go2/tasks/direct/rob6323_go2/rob6323_go2_env_cfg_bonus2.py`.
+
