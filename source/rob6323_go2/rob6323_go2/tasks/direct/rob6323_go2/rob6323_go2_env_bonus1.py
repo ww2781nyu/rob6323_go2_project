@@ -90,7 +90,11 @@ class Rob6323Go2Env(DirectRLEnv):
         self.motor_offsets = torch.zeros(self.num_envs, 12, device=self.device)
         self.torque_limits = cfg.torque_limits
         #Grace update done
-        
+        # --- Bonus 1: Actuator friction parameters ---
+        self.friction_Fs = torch.zeros(self.num_envs, 12, device=self.device)
+        self.friction_muV = torch.zeros(self.num_envs, 12, device=self.device)
+
+
         
         self.set_debug_vis(self.cfg.debug_vis)
 
@@ -125,22 +129,13 @@ class Rob6323Go2Env(DirectRLEnv):
         #Grace update done
 
     def _apply_action(self) -> None:
-        #Grace update
-        torques = torch.clip(
-            (
-                self.Kp * (
-                    self.desired_joint_pos 
-                    - self.robot.data.joint_pos 
-                )
-                - self.Kd * self.robot.data.joint_vel
-            ),
-            -self.torque_limits,
-            self.torque_limits,
-        )
+        #----------Bonus 1---------
+        dq = self.robot.data.joint_vel
+        tau_pd = self.Kp * (self.desired_joint_pos - self.robot.data.joint_pos) - self.Kd * dq
+        tau_friction = self.friction_Fs * torch.tanh(dq / 0.1) + self.friction_muV * dq
+        torques = torch.clip(tau_pd - tau_friction, -self.torque_limits, self.torque_limits)
         self.robot.set_joint_effort_target(torques)
-        #Grace update done
-        
-        
+
     def _get_observations(self) -> dict:
         self._previous_actions = self._actions.clone()
         obs = torch.cat(
@@ -288,6 +283,10 @@ class Rob6323Go2Env(DirectRLEnv):
         self._commands[env_ids] = torch.zeros_like(self._commands[env_ids]).uniform_(-1.0, 1.0)
         # Reset last actions history Grace update
         self.last_actions[env_ids] = 0.
+        # --- Bonus 1: Randomize friction parameters per episode ---
+        num_resets = len(env_ids)
+        self.friction_muV[env_ids] = torch.rand(num_resets, 12, device=self.device) * 0.3
+        self.friction_Fs[env_ids]  = torch.rand(num_resets, 12, device=self.device) * 2.5
         # Reset robot state
         joint_pos = self.robot.data.default_joint_pos[env_ids]
         joint_vel = self.robot.data.default_joint_vel[env_ids]
