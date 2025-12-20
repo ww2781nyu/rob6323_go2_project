@@ -1,4 +1,4 @@
-# ROB6323 Go2 Project — Isaac Lab
+\# ROB6323 Go2 Project — Isaac Lab
 
 This repository is the starter code for the NYU Reinforcement Learning and Optimal Control project in which students train a Unitree Go2 walking policy in Isaac Lab starting from a minimal baseline and improve it via reward shaping and robustness strategies. Please read this README fully before starting and follow the exact workflow and naming rules below to ensure your runs integrate correctly with the cluster scripts and grading pipeline.
 
@@ -190,5 +190,6 @@ Students should only edit README.md below this line.
 3. We did not modify any parameters other than those mentioned above.
 4. To reproduce the results, simply run the code.
 5. To reproduce the results for bonus 1, remove "_bonus1" from the end of the filename of the file located at `source/rob6323_go2/rob6323_go2/tasks/direct/rob6323_go2/rob6323_go2_env_bonus1.py`.
-6. To reproduce the results of bonus2, simply remove "_bonus2" from the end of the filename of `source/rob6323_go2/rob6323_go2/tasks/direct/rob6323_go2/rob6323_go2_env_cfg_bonus2.py`.
+6. Regarding bonus2, we chose an uneven terrain.
+7. To reproduce the results of bonus2, simply remove "_bonus2" from the end of the filename of `source/rob6323_go2/rob6323_go2/tasks/direct/rob6323_go2/rob6323_go2_env_cfg_bonus2.py`.
 
